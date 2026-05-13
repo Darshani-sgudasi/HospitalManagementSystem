@@ -1,0 +1,137 @@
+{% extends 'navigation.html' %}
+{% load static %}
+{% block body %}
+
+<head>
+  <style>
+    .hero-banner {
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      background-image: linear-gradient(rgba(0,0,0,0.48), rgba(0,0,0,0.48)), url('{% static "images/h31.jpg" %}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #fff;
+      padding: 4rem 0;
+    }
+
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.22);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 866px;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2.8rem, 4vw, 4.5rem);
+      line-height: 1.05;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 0 24px 48px rgba(0,0,0,0.35);
+    }
+
+    .hero-content p.lead {
+      font-size: 1.12rem;
+      margin-bottom: 1.75rem;
+      max-width: 680px;
+      color: #e8e8eb;
+      text-shadow: 0 16px 30px rgba(0,0,0,0.25);
+    }
+
+    .hero-buttons .btn {
+      min-width: 170px;
+      margin-right: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+
+    .feature-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      padding: 1.5rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+      transition: transform 0.25s ease, background 0.25s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255,255,255,0.12);
+    }
+
+    .feature-icon {
+      width: 46px;
+      height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.18);
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+    }
+
+    .feature-card h5 {
+      margin-bottom: 0.65rem;
+    }
+
+    .feature-card p {
+      color: #dcdfe8;
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 768px) {
+      .hero-banner {
+        min-height: 75vh;
+        padding: 3rem 0;
+      }
+    }
+  </style>
+</head>
+
+<section class="hero-banner">
+  <div class="container hero-content">
+    <!-- <span class="badge bg-primary py-2 px-3 mb-3">Hospital Management System</span> -->
+    <h2>Complete healthcare coordination for doctors, patients and administrators.</h2>
+    <p class="lead">Book appointments, manage doctors and patients, track records, and run your hospital operations from one modern dashboard.</p>
+    <div class="hero-buttons">
+      <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Admin Login</a>
+      <a href="{% url 'contact' %}" class="btn btn-outline-light btn-lg">Contact Us</a>
+    </div>
+
+    <div class="hero-features">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
+        <h5>Easy Appointments</h5>
+        <p>Quickly schedule, view and manage all patient visits in one place.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-user-md"></i></div>
+        <h5>Doctor Management</h5>
+        <p>Keep doctor profiles, specialties and availability organized and accessible.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-notes-medical"></i></div>
+        <h5>Patient Records</h5>
+        <p>View patient details and history with clean, reliable administrative controls.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

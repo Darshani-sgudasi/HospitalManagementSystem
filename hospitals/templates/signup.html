@@ -1,0 +1,68 @@
+{% extends 'navigation.html' %}
+{% load static %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+{% block body %}
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-side left">
+      <div class="brand">
+        <div class="brand-icon"><i class="fas fa-user-plus"></i></div>
+        <h1>SIGN UP</h1>
+        <p>Create your HMS admin access and start managing appointments, doctors, and patients in one place.</p>
+      </div>
+
+      <div class="auth-social">
+        <span>Start faster</span>
+        <div class="auth-social-buttons">
+          <a href="#" class="social-btn google">Google</a>
+          <a href="#" class="social-btn facebook">Facebook</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-side right">
+      <div class="auth-panel">
+        {% if error == "no" %}
+          <div class="auth-message success">Account created successfully. <a href="{% url 'login' %}">Sign in now</a>.</div>
+        {% elif error == "exists" %}
+          <div class="auth-message error">That username is already taken. Pick another.</div>
+        {% elif error == "mismatch" %}
+          <div class="auth-message error">Passwords do not match. Please try again.</div>
+        {% elif error == "yes" %}
+          <div class="auth-message error">Unable to create your account right now. Please try again later.</div>
+        {% endif %}
+
+        <form method="post" class="auth-form">
+          {% csrf_token %}
+          <h2>Create your account</h2>
+          <p>Sign up to manage hospital operations from a single admin portal.</p>
+
+          <div class="auth-field">
+            <input type="text" name="uname" id="uname" placeholder=" " required>
+            <label for="uname">Choose username</label>
+          </div>
+
+          <div class="auth-field">
+            <input type="password" name="pwd" id="pwd" placeholder=" " required>
+            <label for="pwd">Password</label>
+          </div>
+
+          <div class="auth-field">
+            <input type="password" name="cpwd" id="cpwd" placeholder=" " required>
+            <label for="cpwd">Confirm password</label>
+          </div>
+
+          <button type="submit" class="auth-button">Create Account</button>
+
+          <div class="auth-note">Already have an account? <a href="{% url 'login' %}">Sign in</a></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

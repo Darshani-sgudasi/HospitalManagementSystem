@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+
+
+  <style media="screen">
+    a:link, a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .menu ul li {
+      list-style: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- partial:index.partial.html -->
+  <nav class="menu" tabindex="0">
+    <header class="avatar">
+      <img src="{% static 'images/h8.png' %}" />
+      <h6>Admin</h6>
+      <p>Hospital Administrator</p>
+    </header>
+    <ul>
+      <li class="active"><a href="{% url 'admin_home' %}"><i class="fa fa-tachometer"></i> Dashboard</a></li>
+      <li class="has-submenu">
+        <a href="#"><i class="fa fa-user-md"></i> Doctors <i class="fa fa-chevron-down submenu-caret"></i></a>
+        <ul class="submenu">
+          <li><a href="{% url 'add_doctor' %}">Add Doctor</a></li>
+          <li><a href="{% url 'view_doctor' %}">View Doctors</a></li>
+        </ul>
+      </li>
+      <li class="has-submenu">
+        <a href="#"><i class="fa fa-users"></i> Patients <i class="fa fa-chevron-down submenu-caret"></i></a>
+        <ul class="submenu">
+          <li><a href="{% url 'add_patient' %}">Add Patient</a></li>
+          <li><a href="{% url 'view_patient' %}">View Patients</a></li>
+        </ul>
+      </li>
+      <li class="has-submenu">
+        <a href="#"><i class="fa fa-calendar"></i> Appointments <i class="fa fa-chevron-down submenu-caret"></i></a>
+        <ul class="submenu">
+          <li><a href="{% url 'add_appointment' %}">Add Appointment</a></li>
+          <li><a href="{% url 'view_appointment' %}">View Appointments</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="menu-divider"></div>
+    <ul>
+      <li class="logout-link"><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Logout</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+    {% block content %}
+    {% endblock content %}
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.has-submenu > a').forEach(function (link) {
+        link.addEventListener('click', function (event) {
+          event.preventDefault();
+          this.parentElement.classList.toggle('open');
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
