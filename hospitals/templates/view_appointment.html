@@ -19,11 +19,15 @@
 			<thead>
 				<tr>
 					<th>S.No</th>
+					<th>Token</th>
 					<th>Doctor Name</th>
 					<th>Patient Name</th>
                     <th>Date</th>
 					<th>Time</th>
+					<th>Status</th>
+					{% if can_manage %}
 					<th>Action</th>
+					{% endif %}
 				</tr>
 			</thead>
 
@@ -31,10 +35,15 @@
             {% for i in appointment %}
 			<tr>
 				<td>{{ forloop.counter }}</td>
+				<td class="patient-id">{{i.token_number|default:"Pending"}}</td>
 				<td>{{i.doctor}}</td>
+				<td>{{i.patient}}</td>
 				<td>{{i.date1}}</td>
 				<td>{{i.time1}}</td>
+				<td>{{i.status}}</td>
+				{% if can_manage %}
 				<td><a href="{% url 'delete_appointment' i.id %}" onclick="return confirm('Are you ready to delete this record ?')" class="btn btn-danger">Delete</a></td>
+				{% endif %}
 			</tr>
 			{% endfor %}
 			</tbody>

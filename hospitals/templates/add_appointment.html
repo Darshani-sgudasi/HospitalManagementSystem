@@ -24,8 +24,7 @@
      </script>
 {% endif %}
 
-<br><br><br><br>
-<div class="container card shadow m-5">
+<div class="container card shadow">
 		<div class="card-body">
 			<h5 class="p-2" style="border-bottom: 2px solid orange">Add Appointment</h5>
              <br>
@@ -68,6 +67,18 @@
 							<div class="form-group">
 								<label>Time</label>
 								<input type="time" name="time" class="form-control" required>
+							</div>
+						</div>
+
+                        <div class="col-sm-12">
+							<div class="form-group">
+								<label>Status</label>
+								<select name="status" class="form-control">
+									<option>Pending</option>
+									<option>Confirmed</option>
+									<option>Cancelled</option>
+									<option>Completed</option>
+								</select>
 							</div>
 						</div>
 

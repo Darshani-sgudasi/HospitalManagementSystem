@@ -150,7 +150,8 @@
   position: relative;
 }
 
-.auth-field input {
+.auth-field input,
+.auth-field select {
   width: 100%;
   padding: 1rem 1.1rem;
   border: 1px solid #dde1ea;
@@ -165,7 +166,8 @@
   color: transparent;
 }
 
-.auth-field input:focus {
+.auth-field input:focus,
+.auth-field select:focus {
   outline: none;
   border-color: #a97dc9;
   box-shadow: 0 0 0 4px rgba(169, 125, 201, 0.15);
@@ -183,7 +185,9 @@
 }
 
 .auth-field input:focus + label,
-.auth-field input:not(:placeholder-shown) + label {
+.auth-field input:not(:placeholder-shown) + label,
+.auth-field select:focus + label,
+.auth-field select:valid + label {
   top: 0.45rem;
   left: 1rem;
   font-size: 0.75rem;

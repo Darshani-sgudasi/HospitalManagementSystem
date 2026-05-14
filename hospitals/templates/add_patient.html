@@ -22,8 +22,7 @@
      </script>
 {% endif %}
 
-<br><br><br><br>
-<div class="container card shadow m-5">
+<div class="container card shadow">
 		<div class="card-body">
 			<h5 class="p-2" style="border-bottom: 2px solid orange">Add Patient</h5>
              <br>
@@ -35,7 +34,17 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>Patient Name</label>
-							<input type="text" name="name" class="form-control" placeholder="Enter patient name" required>
+								<input type="text" name="name" class="form-control" placeholder="Enter patient name" required>
+							</div>
+						</div>
+
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Age</label>
+								<input type="number" name="age" class="form-control" placeholder="Enter patient age">
+							</div>
+						</div>
+
                     	<div class="col-sm-12">
 							<div class="form-group">
 								<label>Mobile Number</label>
@@ -53,19 +62,52 @@
 
 						<div class="col-sm-12">
 							<div class="form-group">
+								<label>Blood Group</label>
+								<select name="blood_group" class="form-control">
+									<option value="">Select blood group</option>
+									<option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+									<option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Disease</label>
+								<input type="text" name="disease" class="form-control" placeholder="Enter disease or diagnosis">
+							</div>
+						</div>
+
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Admission Date</label>
+								<input type="date" name="admission_date" class="form-control">
+							</div>
+						</div>
+
+						<div class="col-sm-12">
+							<div class="form-group">
 								<label>Address</label>
                                 <textarea name="address" class="form-control" placeholder="Enter patient address" required></textarea>
-					</div>
+							</div>
 						</div>
 
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label>Ward</label>
-                                <input type="text" name="ward" class="form-control" placeholder="Enter ward name or number" required>
+                                <select name="ward" class="form-control" required>
+                                    <option value="">Select ward</option>
+                                    <option value="General Ward">General Ward</option>
+                                    <option value="ICU">ICU</option>
+                                    <option value="Emergency">Emergency</option>
+                                    <option value="Pediatrics">Pediatrics</option>
+                                    <option value="Maternity">Maternity</option>
+                                    <option value="Private Room">Private Room</option>
+                                </select>
                             </div>
                         </div>
 
-                      </div>
+                    </div>
 					<hr>
 					<input type="submit" value="Submit" class="btn btn-primary">
 				</form>

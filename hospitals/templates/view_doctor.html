@@ -26,7 +26,13 @@
 					<th>Doctor Name</th>
 					<th>Contact</th>
 					<th>Specialization</th>
+					<th>Department</th>
+					<th>Qualification</th>
+					<th>Availability</th>
+					<th>Assigned Patients</th>
+                    {% if can_manage %}
                     <th>Action</th>
+                    {% endif %}
 				</tr>
 			</thead>
 
@@ -37,8 +43,14 @@
 				<td>{{i.name}}</td>
 				<td>{{i.mobile}}</td>
 				<td>{{i.special}}</td>
+				<td>{{i.department}}</td>
+				<td>{{i.qualification|default:"MBBS"}}</td>
+				<td>{{i.availability}}</td>
+				<td>{{i.assigned_patients}}</td>
+				{% if can_manage %}
 				<td><a href="{% url 'edit_doctor' i.id %}" class="btn btn-primary">Edit</a> |
 				<a href="{% url 'delete_doctor' i.id %}" onclick="return confirm('Are you ready to delete this record ?')" class="btn btn-danger">Delete</a></td>
+				{% endif %}
 			</tr>
 			{% endfor %}
 			</tbody>

@@ -19,12 +19,19 @@
 			<thead>
 				<tr>
 					<th>S.No</th>
+					<th>Patient ID</th>
 					<th>Patient Name</th>
+                    <th>Age</th>
                     <th>Gender</th>
 					<th>Contact</th>
+					<th>Blood Group</th>
+					<th>Disease</th>
+					<th>Admission Date</th>
 					<th>Address</th>
                     <th>Ward</th>
+                    {% if can_manage %}
                     <th>Action</th>
+                    {% endif %}
 				</tr>
 			</thead>
 
@@ -32,13 +39,20 @@
             {% for i in pat %}
 			<tr>
 				<td>{{ forloop.counter }}</td>
+				<td class="patient-id">{{i.patient_id|default:"Auto ID"}}</td>
 				<td>{{i.name}}</td>
+				<td>{{i.age|default:"-"}}</td>
 				<td>{{i.gender}}</td>
 				<td>{{i.mobile}}</td>
+				<td>{{i.blood_group|default:"-"}}</td>
+				<td>{{i.disease|default:"General Checkup"}}</td>
+				<td>{{i.admission_date|default:"-"}}</td>
 				<td>{{i.address}}</td>
 					<td>{{i.ward}}</td>
+				{% if can_manage %}
 				<td><a href="{% url 'edit_patient' i.id %}" class="btn btn-primary">Edit</a> |
 					<a href="{% url 'delete_patient' i.id %}" onclick="return confirm('Are you ready to delete this record ?')" class="btn btn-danger">Delete</a></td>
+				{% endif %}
 			</tr>
 			{% endfor %}
 			</tbody>

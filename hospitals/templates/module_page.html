@@ -1,0 +1,193 @@
+{% extends "admin_nav.html" %}
+{% block content %}
+
+{% if error == "no" %}
+<script>
+  alert('Record saved successfully');
+  window.location.href = "{% if module_type == 'add_report' %}{% url 'view_reports' %}{% elif module_type == 'add_medicine' %}{% url 'inventory' %}{% else %}{% url 'admin_home' %}{% endif %}";
+</script>
+{% endif %}
+
+{% if error == "yes" %}
+<script>
+  alert('Something went wrong, Try Again');
+</script>
+{% endif %}
+
+<section class="module-card full">
+  <div class="module-header">
+    <div>
+      <h2>{{ title }}</h2>
+      <p>{{ subtitle }}</p>
+    </div>
+  </div>
+
+  <div class="module-body">
+    {% if module_type == "add_report" %}
+    <form class="erp-form" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <select name="patient" required>
+        <option value="">Select patient</option>
+        {% for patient in patients %}<option value="{{ patient.id }}">{{ patient.name }}</option>{% endfor %}
+      </select>
+      <select name="category" required>
+        <option>Blood Test</option>
+        <option>Scan</option>
+        <option>X-Ray</option>
+        <option>Urine Test</option>
+        <option>Other</option>
+      </select>
+      <input type="text" name="title" placeholder="Report title" required>
+      <input type="file" name="report_file" required>
+      <textarea class="span-2" name="remarks" rows="4" placeholder="Clinical remarks"></textarea>
+      <button class="btn btn-primary span-2" type="submit">Save Report</button>
+    </form>
+
+    {% elif module_type == "view_reports" %}
+    <div class="table-responsive">
+      <table class="erp-table">
+        <thead><tr><th>Patient</th><th>Category</th><th>Status</th><th>Download</th></tr></thead>
+        <tbody>
+          {% for report in lab_report_rows %}
+          <tr data-search-row>
+            <td>{{ report.patient.name }}</td>
+            <td>{{ report.category }}</td>
+            <td><span class="status-badge status-{{ report.status|lower }}">{{ report.status }}</span></td>
+            <td><a class="btn btn-light btn-sm" href="{% url 'download_report' report.id %}"><i class="fa fa-download"></i> Download</a></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4">No reports uploaded yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% elif module_type == "add_medicine" %}
+    <form class="erp-form" method="post">
+      {% csrf_token %}
+      <input type="text" name="name" placeholder="Medicine name" required>
+      <input type="number" name="stock" min="0" placeholder="Stock quantity" required>
+      <input type="date" name="expiry_date" placeholder="Expiry date" required>
+      <input type="text" name="prescribed_for" placeholder="Prescribed for">
+      <textarea class="span-2" name="dosage_notes" rows="4" placeholder="Dosage notes"></textarea>
+      <button class="btn btn-primary span-2" type="submit">Add Medicine</button>
+    </form>
+
+    {% elif module_type == "inventory" %}
+    <div class="table-responsive">
+      <table class="erp-table">
+        <thead><tr><th>Medicine</th><th>Stock</th><th>Expiry</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for medicine in medicine_inventory %}
+          <tr data-search-row>
+            <td>{{ medicine.name }}</td>
+            <td>{{ medicine.stock }}</td>
+            <td>{{ medicine.expiry_date }}</td>
+            <td>
+              {% if medicine.status == "Low Stock" %}
+              <span class="status-badge status-low-stock">Low Stock</span>
+              {% else %}
+              <span class="status-badge status-available">Available</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4">No medicines added yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% elif module_type == "create_bill" %}
+    <form class="erp-form" id="billingForm">
+      <select class="span-2">
+        <option>Select patient</option>
+        {% for patient in patients %}<option>{{ patient.name }}</option>{% endfor %}
+      </select>
+      <input type="number" id="consultationFee" placeholder="Consultation fee" value="500">
+      <input type="number" id="labCharges" placeholder="Lab charges" value="1200">
+      <input type="number" id="medicineCharges" placeholder="Medicine charges" value="850">
+      <input type="number" id="roomCharges" placeholder="Room charges" value="0">
+    </form>
+    <div class="invoice-box mt-3">
+      <div class="invoice-row"><span>Consultation</span><strong id="consultationOut">500</strong></div>
+      <div class="invoice-row"><span>Lab Charges</span><strong id="labOut">1200</strong></div>
+      <div class="invoice-row"><span>Medicine</span><strong id="medicineOut">850</strong></div>
+      <div class="invoice-row"><span>Room</span><strong id="roomOut">0</strong></div>
+      <div class="invoice-row total"><span>Total Bill</span><strong id="billTotal">2550</strong></div>
+    </div>
+    <button class="btn btn-primary mt-3 no-print" type="button" onclick="window.print()"><i class="fa fa-print"></i> Print Invoice</button>
+
+    {% elif module_type == "payment_history" %}
+    <div class="table-responsive">
+      <table class="erp-table">
+        <thead><tr><th>Invoice</th><th>Patient/Service</th><th>Amount</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for payment in payment_rows %}
+          <tr data-search-row>
+            <td class="patient-id">{{ payment.invoice }}</td>
+            <td>{{ payment.patient }}</td>
+            <td>{{ payment.amount }}</td>
+            <td><span class="status-badge status-{% if payment.status == 'Paid' %}available{% else %}pending{% endif %}">{{ payment.status }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% elif module_type == "analytics" %}
+    <div class="module-grid">
+      <article class="module-card third"><div class="module-header"><div><h3>Appointment Trends</h3><p>Last six months</p></div></div><div class="module-body chart-wrap"><canvas id="patientChart"></canvas></div></article>
+      <article class="module-card third"><div class="module-header"><div><h3>Department Stats</h3><p>Doctor count</p></div></div><div class="module-body chart-wrap"><canvas id="departmentChart"></canvas></div></article>
+      <article class="module-card third"><div class="module-header"><div><h3>Bed Occupancy</h3><p>{{ available_beds }} beds available</p></div></div><div class="module-body chart-wrap"><canvas id="bedChart"></canvas></div></article>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% if module_type == "create_bill" %}
+<script>
+  function updateBill() {
+    const consultation = Number(document.getElementById('consultationFee').value || 0);
+    const lab = Number(document.getElementById('labCharges').value || 0);
+    const medicine = Number(document.getElementById('medicineCharges').value || 0);
+    const room = Number(document.getElementById('roomCharges').value || 0);
+    document.getElementById('consultationOut').textContent = consultation.toFixed(0);
+    document.getElementById('labOut').textContent = lab.toFixed(0);
+    document.getElementById('medicineOut').textContent = medicine.toFixed(0);
+    document.getElementById('roomOut').textContent = room.toFixed(0);
+    document.getElementById('billTotal').textContent = (consultation + lab + medicine + room).toFixed(0);
+  }
+  document.querySelectorAll('#billingForm input').forEach(function (input) {
+    input.addEventListener('input', updateBill);
+  });
+</script>
+{% endif %}
+
+{% if module_type == "analytics" %}
+<script>
+  const monthLabels = JSON.parse('{{ patient_overview_labels|escapejs }}');
+  const patientCounts = JSON.parse('{{ patient_overview_counts|escapejs }}');
+  const departmentLabels = JSON.parse('{{ department_labels|escapejs }}');
+  const departmentCounts = JSON.parse('{{ department_counts|escapejs }}');
+  const bedCounts = JSON.parse('{{ bed_occupancy_counts|escapejs }}');
+
+  new Chart(document.getElementById('patientChart'), {
+    type: 'line',
+    data: { labels: monthLabels, datasets: [{ label: 'Appointments', data: patientCounts, borderColor: '#246bfe', backgroundColor: 'rgba(36,107,254,.12)', tension: .35, fill: true }] },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+  new Chart(document.getElementById('departmentChart'), {
+    type: 'bar',
+    data: { labels: departmentLabels, datasets: [{ label: 'Doctors', data: departmentCounts, backgroundColor: '#15a37f' }] },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+  new Chart(document.getElementById('bedChart'), {
+    type: 'doughnut',
+    data: { labels: ['Occupied', 'Available'], datasets: [{ data: bedCounts, backgroundColor: ['#246bfe', '#dde6f2'], borderWidth: 0 }] },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+</script>
+{% endif %}
+
+{% endblock %}

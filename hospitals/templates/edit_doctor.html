@@ -22,8 +22,7 @@
      </script>
 {% endif %}
 
-<br><br><br><br>
-<div class="container card shadow m-5">
+<div class="container card shadow">
 		<div class="card-body">
 			<h5 class="p-2" style="border-bottom: 2px solid orange">Edit Doctors</h5>
              <br>
@@ -50,6 +49,44 @@
 							<div class="form-group">
 								<label>Specialization</label>
 								<input type="text" name="special" class="form-control" value="{{doctor.special}}" required>
+							</div>
+						</div>
+
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Department</label>
+								<select name="department" class="form-control">
+									<option {% if doctor.department == "Cardiology" %}selected{% endif %}>Cardiology</option>
+									<option {% if doctor.department == "Neurology" %}selected{% endif %}>Neurology</option>
+									<option {% if doctor.department == "Orthopedics" %}selected{% endif %}>Orthopedics</option>
+									<option {% if doctor.department == "Pediatrics" %}selected{% endif %}>Pediatrics</option>
+									<option {% if doctor.department == "General Medicine" %}selected{% endif %}>General Medicine</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Qualification</label>
+								<input type="text" name="qualification" class="form-control" value="{{doctor.qualification}}">
+							</div>
+						</div>
+
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Availability</label>
+								<select name="availability" class="form-control">
+									<option {% if doctor.availability == "Available" %}selected{% endif %}>Available</option>
+									<option {% if doctor.availability == "On Duty" %}selected{% endif %}>On Duty</option>
+									<option {% if doctor.availability == "Unavailable" %}selected{% endif %}>Unavailable</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>Assigned Patients</label>
+								<input type="number" name="assigned_patients" class="form-control" value="{{doctor.assigned_patients}}" min="0">
 							</div>
 						</div>
 

@@ -1,334 +1,160 @@
-﻿{% extends "admin_nav.html" %}
-{% load static %}
+{% extends "admin_nav.html" %}
 {% block content %}
 
-<style>
-  .admin-dashboard-bg {
-    min-height: calc(100vh - 40px);
-    padding: 2rem 2rem 3rem;
-    background-image: url("{% static 'images/admin_home1.jpg' %}");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    position: relative;
-    overflow: hidden;
-  }
+<section class="dashboard-grid">
+  <div class="stats-grid">
+    <a class="stat-card" href="{% url 'view_patient' %}">
+      <span class="stat-icon soft-blue"><i class="fa fa-users"></i></span>
+      <div>
+        <h3>{{ pc|default:0 }}</h3>
+        <p>Total Patients</p>
+      </div>
+    </a>
 
-  .admin-dashboard-bg::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at top right, rgba(86, 182, 255, 0.35), transparent 25%),
-      radial-gradient(circle at bottom left, rgba(77, 221, 165, 0.35), transparent 22%);
-    pointer-events: none;
-  }
+    <a class="stat-card" href="{% url 'view_doctor' %}">
+      <span class="stat-icon soft-green"><i class="fa fa-user-md"></i></span>
+      <div>
+        <h3>{{ dc|default:0 }}</h3>
+        <p>Total Doctors</p>
+      </div>
+    </a>
 
-  .dashboard-page,
-  .admin-dashboard-bg > * {
-    position: relative;
-    z-index: 1;
-  }
+    <a class="stat-card" href="{% url 'view_appointment' %}">
+      <span class="stat-icon soft-orange"><i class="fa fa-calendar-check-o"></i></span>
+      <div>
+        <h3>{{ today_appointments|default:0 }}</h3>
+        <p>Appointments Today</p>
+        <small>Total: {{ ac|default:0 }}</small>
+      </div>
+    </a>
 
-  .dashboard-hero {
-    border-radius: 30px;
-    padding: 2rem;
-    background: rgba(5, 19, 42, 0.74);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    box-shadow: 0 40px 90px rgba(0, 0, 0, 0.22);
-    margin-bottom: 2rem;
-  }
+    <article class="stat-card">
+      <span class="stat-icon soft-purple"><i class="fa fa-bed"></i></span>
+      <div>
+        <h3>{{ available_beds|default:0 }}</h3>
+        <p>Available Beds</p>
+      </div>
+    </article>
+  </div>
 
-  .hero-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    align-items: stretch;
-  }
-
-  .hero-text {
-    flex: 1 1 420px;
-    min-width: 280px;
-  }
-
-  .hero-badge {
-    display: inline-flex;
-    padding: 0.75rem 1.2rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.12);
-    color: #b8d4ff;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    font-size: 0.8rem;
-    font-weight: 700;
-  }
-
-  .hero-headline {
-    color: #fff;
-    font-size: clamp(2.75rem, 5vw, 4.2rem);
-    line-height: 1.02;
-    margin: 1rem 0 1rem;
-  }
-
-  .hero-text p {
-    color: rgba(255, 255, 255, 0.82);
-    font-size: 1.05rem;
-    max-width: 720px;
-    margin-bottom: 1.5rem;
-  }
-
-  .hero-actions a {
-    margin-right: 0.75rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .btn-hero,
-  .btn-hero-outline {
-    border-radius: 999px;
-    font-weight: 700;
-    padding: 0.95rem 1.6rem;
-    min-width: 170px;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-  }
-
-  .btn-hero:hover,
-  .btn-hero-outline:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 20px 40px rgba(64, 128, 255, 0.18);
-  }
-
-  .btn-hero {
-    background: linear-gradient(135deg, #5d8def, #38b8ff);
-    border: none;
-    color: #fff;
-  }
-
-  .btn-hero-outline {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.24);
-    color: #edf2ff;
-  }
-
-  .hero-stats {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    width: 320px;
-  }
-
-  @media (min-width: 850px) {
-    .hero-stats {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      width: auto;
-    }
-  }
-
-  .hero-stat {
-    border-radius: 24px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    padding: 1.35rem 1.2rem;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    transition: transform 0.25s ease, background 0.25s ease;
-  }
-
-  .hero-stat:hover {
-    transform: translateY(-4px);
-    background: rgba(255, 255, 255, 0.12);
-  }
-
-  .hero-stat span {
-    display: block;
-    font-size: 2.25rem;
-    font-weight: 800;
-    color: #fff;
-    margin-bottom: 0.35rem;
-  }
-
-  .hero-stat small {
-    color: rgba(255, 255, 255, 0.72);
-    font-size: 0.95rem;
-  }
-
-  .market-updates {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .market-update-block {
-    padding: 2rem 1.8rem;
-    border-radius: 28px;
-    color: #fff;
-    min-height: 190px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 30px 90px rgba(3, 13, 33, 0.18);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
-    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-  }
-
-  .market-update-block:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 35px 110px rgba(8, 27, 57, 0.28);
-    filter: saturate(1.05);
-  }
-
-  .market-update-block h3 {
-    font-size: 3rem;
-    margin: 0;
-    letter-spacing: -0.04em;
-  }
-
-  .market-update-block h4 {
-    font-size: 1.05rem;
-    margin: 0.6rem 0 0;
-    opacity: 0.92;
-  }
-
-  .market-update-block a {
-    color: inherit;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    height: 100%;
-    padding: -2rem -1.8rem;
-  }
-
-  .market-update-block a:hover {
-    text-decoration: none;
-  }
-
-  .market-update-left {
-    padding: 0;
-  }
-
-  .market-update-right i {
-    font-size: 3.1rem;
-    width: 78px;
-    height: 78px;
-    background: rgba(255, 255, 255, 0.14);
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-  }
-
-  .clr-block-1 {
-    background: linear-gradient(130deg, #43cea2, #185a9d);
-  }
-
-  .clr-block-2 {
-    background: linear-gradient(130deg, #f093fb, #f5576c);
-  }
-
-  .clr-block-3 {
-    background: linear-gradient(130deg, #34e89e, #0f3443);
-  }
-
-  .clr-block-1:hover,
-  .clr-block-2:hover,
-  .clr-block-3:hover {
-    background: rgba(255, 255, 255, 0.08);
-  }
-
-  .market-update-right i.fa-user-md {
-    color: #ffdd57;
-  }
-
-  .market-update-right i.fa-user-o {
-    color: #7afcff;
-  }
-
-  .market-update-right i.fa-calendar {
-    color: #4cc9f0;
-  }
-
-  .dashboard-footer {
-    text-align: center;
-    margin-top: 2.5rem;
-    padding: 1.5rem 1rem;
-    color: rgba(255, 255, 255, 0.78);
-    font-size: 0.96rem;
-  }
-
-  .dashboard-footer strong {
-    color: #ffffff;
-  }
-</style>
-
-<div class="dashboard-page admin-dashboard-bg">
-  <!-- <section class="dashboard-hero">
-    <div class="hero-row">
-      <div class="hero-text">
-        <span class="hero-badge">Hospital Management</span>
-        <h1 class="hero-headline">Admin dashboard built for clarity and speed</h1>
-        <p>Track doctors, patients, and appointments with an interactive summary view. Use the quick cards below to navigate instantly.</p>
-        <div class="hero-actions">
-          <a class="btn btn-hero" href="{% url 'view_doctor' %}">View Doctors</a>
-          <a class="btn btn-hero-outline" href="{% url 'view_appointment' %}">View Appointments</a>
+  <div class="module-grid">
+    <section class="module-card full">
+      <div class="module-header">
+        <div>
+          <h2>Recent Appointments</h2>
+          <p>Latest appointment activity</p>
+        </div>
+        <a class="btn btn-primary btn-sm" href="{% url 'view_appointment' %}">View All</a>
+      </div>
+      <div class="module-body">
+        <div class="table-responsive">
+          <table class="erp-table">
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for appointment in appointment_roster %}
+              <tr data-search-row>
+                <td>
+                  <div class="appointment-person">
+                    <span class="avatar-initial">{{ appointment.patient.name|first|upper }}</span>
+                    <strong>{{ appointment.patient.name }}</strong>
+                  </div>
+                </td>
+                <td>{{ appointment.doctor.name }}</td>
+                <td>{{ appointment.date1 }}</td>
+                <td>{{ appointment.time1 }}</td>
+                <td><span class="status-badge status-{{ appointment.status|lower }}">{{ appointment.status }}</span></td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5">No appointments found.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <span>{{dc}}</span>
-          <small>Total Doctors</small>
-        </div>
-        <div class="hero-stat">
-          <span>{{pc}}</span>
-          <small>Total Patients</small>
-        </div>
-        <div class="hero-stat">
-          <span>{{ac}}</span>
-          <small>Total Appointments</small>
+    </section>
+
+    <section class="module-card third">
+      <div class="module-header">
+        <div>
+          <h3>Monthly Patients</h3>
+          <p>Admissions trend</p>
         </div>
       </div>
-    </div>
-  </section> -->
+      <div class="module-body chart-wrap"><canvas id="patientChart"></canvas></div>
+    </section>
 
-  <section class="market-updates">
-    <div class="market-update-block clr-block-1">
-      <a href="{% url 'view_doctor' %}">
-        <div class="market-update-left">
-          <h3>{{dc}}</h3>
-          <h4>Total Doctors</h4>
+    <section class="module-card third">
+      <div class="module-header">
+        <div>
+          <h3>Departments</h3>
+          <p>Doctor distribution</p>
         </div>
-        <div class="market-update-right">
-          <i class="fa fa-user-md"></i>
-        </div>
-      </a>
-    </div>
+      </div>
+      <div class="module-body chart-wrap"><canvas id="departmentChart"></canvas></div>
+    </section>
 
-    <div class="market-update-block clr-block-2">
-      <a href="{% url 'view_patient' %}">
-        <div class="market-update-left">
-          <h3>{{pc}}</h3>
-          <h4>Total Patients</h4>
+    <section class="module-card third">
+      <div class="module-header">
+        <div>
+          <h3>Bed Occupancy</h3>
+          <p>{{ admitted_patients|default:0 }} occupied, {{ available_beds|default:0 }} available</p>
         </div>
-        <div class="market-update-right">
-          <i class="fa fa-user-o"></i>
-        </div>
-      </a>
-    </div>
+      </div>
+      <div class="module-body chart-wrap"><canvas id="bedChart"></canvas></div>
+    </section>
+  </div>
+</section>
 
-    <div class="market-update-block clr-block-3">
-      <a href="{% url 'view_appointment' %}">
-        <div class="market-update-left">
-          <h3>{{ac}}</h3>
-          <h4>Total Appointments</h4>
-        </div>
-        <div class="market-update-right">
-          <i class="fa fa-calendar"></i>
-        </div>
-      </a>
-    </div>
-  </section>
+<script>
+  const monthLabels = JSON.parse('{{ patient_overview_labels|escapejs }}');
+  const patientCounts = JSON.parse('{{ patient_overview_counts|escapejs }}');
+  const departmentLabels = JSON.parse('{{ department_labels|escapejs }}');
+  const departmentCounts = JSON.parse('{{ department_counts|escapejs }}');
+  const bedCounts = JSON.parse('{{ bed_occupancy_counts|escapejs }}');
 
-  <footer class="dashboard-footer">
-    <p>Copyright &copy; <strong><script>document.write(new Date().getFullYear());</script></strong> All Rights Reserved | Made with heart by Pankaj Panjwani</p>
-  </footer>
-</div>
+  new Chart(document.getElementById('patientChart'), {
+    type: 'line',
+    data: {
+      labels: monthLabels,
+      datasets: [{
+        label: 'Patients',
+        data: patientCounts,
+        borderColor: '#2f6fed',
+        backgroundColor: 'rgba(47, 111, 237, 0.12)',
+        tension: 0.35,
+        fill: true
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+
+  new Chart(document.getElementById('departmentChart'), {
+    type: 'bar',
+    data: {
+      labels: departmentLabels,
+      datasets: [{ label: 'Doctors', data: departmentCounts, backgroundColor: '#14966f' }]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+
+  new Chart(document.getElementById('bedChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Occupied', 'Available'],
+      datasets: [{ data: bedCounts, backgroundColor: ['#7048e8', '#e4eaf3'], borderWidth: 0 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+</script>
 
 {% endblock %}

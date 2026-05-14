@@ -1,84 +1,133 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital ERP Dashboard</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-
-  <link rel="stylesheet" href="{% static 'style.css' %}">
-  <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
-
-
-  <style media="screen">
-    a:link, a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .menu ul li {
-      list-style: none;
-    }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}?v=20260514-portal">
 </head>
-<body>
-  <!-- partial:index.partial.html -->
-  <nav class="menu" tabindex="0">
-    <header class="avatar">
-      <img src="{% static 'images/h8.png' %}" />
-      <h6>Admin</h6>
-      <p>Hospital Administrator</p>
-    </header>
-    <ul>
-      <li class="active"><a href="{% url 'admin_home' %}"><i class="fa fa-tachometer"></i> Dashboard</a></li>
-      <li class="has-submenu">
-        <a href="#"><i class="fa fa-user-md"></i> Doctors <i class="fa fa-chevron-down submenu-caret"></i></a>
-        <ul class="submenu">
-          <li><a href="{% url 'add_doctor' %}">Add Doctor</a></li>
-          <li><a href="{% url 'view_doctor' %}">View Doctors</a></li>
-        </ul>
-      </li>
-      <li class="has-submenu">
-        <a href="#"><i class="fa fa-users"></i> Patients <i class="fa fa-chevron-down submenu-caret"></i></a>
-        <ul class="submenu">
-          <li><a href="{% url 'add_patient' %}">Add Patient</a></li>
-          <li><a href="{% url 'view_patient' %}">View Patients</a></li>
-        </ul>
-      </li>
-      <li class="has-submenu">
-        <a href="#"><i class="fa fa-calendar"></i> Appointments <i class="fa fa-chevron-down submenu-caret"></i></a>
-        <ul class="submenu">
-          <li><a href="{% url 'add_appointment' %}">Add Appointment</a></li>
-          <li><a href="{% url 'view_appointment' %}">View Appointments</a></li>
-        </ul>
-      </li>
-    </ul>
-    <div class="menu-divider"></div>
-    <ul>
-      <li class="logout-link"><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Logout</a></li>
-    </ul>
-  </nav>
+<body class="erp-body">
+  <div class="wrapper">
+  <aside class="sidebar erp-sidebar" tabindex="0">
+    <div class="sidebar-brand">
+      <span class="brand-mark"><i class="fa fa-hospital-o"></i></span>
+      <div>
+        <strong>Hospital HMS</strong>
+        <small>Admin Portal</small>
+      </div>
+    </div>
 
-  <main class="main-content">
-    {% block content %}
-    {% endblock content %}
-  </main>
+    <nav class="sidebar-nav">
+      <a class="{% if request.resolver_match.url_name == 'admin_home' %}active{% endif %}" href="{% url 'admin_home' %}"><i class="fa fa-tachometer"></i><span>Dashboard</span></a>
+
+      <div class="nav-group {% if request.resolver_match.url_name == 'add_patient' or request.resolver_match.url_name == 'view_patient' %}open{% endif %}">
+        <button type="button"><i class="fa fa-users"></i><span>Patients</span><i class="fa fa-angle-down caret"></i></button>
+        <div class="nav-submenu">
+          {% if request.session.user_role != "patient" %}
+          <a class="{% if request.resolver_match.url_name == 'add_patient' %}active-sub{% endif %}" href="{% url 'add_patient' %}">Add Patient</a>
+          {% endif %}
+          <a class="{% if request.resolver_match.url_name == 'view_patient' %}active-sub{% endif %}" href="{% url 'view_patient' %}">View Patients</a>
+        </div>
+      </div>
+
+      <div class="nav-group {% if request.resolver_match.url_name == 'add_doctor' or request.resolver_match.url_name == 'view_doctor' %}open{% endif %}">
+        <button type="button"><i class="fa fa-user-md"></i><span>Doctors</span><i class="fa fa-angle-down caret"></i></button>
+        <div class="nav-submenu">
+          {% if request.session.user_role != "patient" %}
+          <a class="{% if request.resolver_match.url_name == 'add_doctor' %}active-sub{% endif %}" href="{% url 'add_doctor' %}">Add Doctor</a>
+          {% endif %}
+          <a class="{% if request.resolver_match.url_name == 'view_doctor' %}active-sub{% endif %}" href="{% url 'view_doctor' %}">View Doctors</a>
+        </div>
+      </div>
+
+      <div class="nav-group {% if request.resolver_match.url_name == 'add_appointment' or request.resolver_match.url_name == 'view_appointment' %}open{% endif %}">
+        <button type="button"><i class="fa fa-calendar-check-o"></i><span>Appointments</span><i class="fa fa-angle-down caret"></i></button>
+        <div class="nav-submenu">
+          {% if request.session.user_role != "patient" %}
+          <a class="{% if request.resolver_match.url_name == 'add_appointment' %}active-sub{% endif %}" href="{% url 'add_appointment' %}">Add Appointment</a>
+          {% endif %}
+          <a class="{% if request.resolver_match.url_name == 'view_appointment' %}active-sub{% endif %}" href="{% url 'view_appointment' %}">View Appointments</a>
+        </div>
+      </div>
+
+      <div class="nav-group {% if request.resolver_match.url_name == 'add_report' or request.resolver_match.url_name == 'view_reports' or request.resolver_match.url_name == 'download_reports' %}open{% endif %}">
+        <button type="button"><i class="fa fa-flask"></i><span>Laboratory</span><i class="fa fa-angle-down caret"></i></button>
+        <div class="nav-submenu">
+          <a class="{% if request.resolver_match.url_name == 'add_report' %}active-sub{% endif %}" href="{% url 'add_report' %}">Add Reports</a>
+          <a class="{% if request.resolver_match.url_name == 'view_reports' %}active-sub{% endif %}" href="{% url 'view_reports' %}">View Reports</a>
+        </div>
+      </div>
+
+      <div class="nav-group {% if request.resolver_match.url_name == 'add_medicine' or request.resolver_match.url_name == 'inventory' %}open{% endif %}">
+        <button type="button"><i class="fa fa-medkit"></i><span>Pharmacy</span><i class="fa fa-angle-down caret"></i></button>
+        <div class="nav-submenu">
+          <a class="{% if request.resolver_match.url_name == 'add_medicine' %}active-sub{% endif %}" href="{% url 'add_medicine' %}">Add Medicine</a>
+          <a class="{% if request.resolver_match.url_name == 'inventory' %}active-sub{% endif %}" href="{% url 'inventory' %}">Inventory</a>
+        </div>
+      </div>
+
+      <a class="{% if request.resolver_match.url_name == 'create_bill' or request.resolver_match.url_name == 'payment_history' %}active{% endif %}" href="{% url 'create_bill' %}"><i class="fa fa-file-text-o"></i><span>Billing</span></a>
+
+      <a class="{% if request.resolver_match.url_name == 'analytics' %}active{% endif %}" href="{% url 'analytics' %}"><i class="fa fa-line-chart"></i><span>Analytics</span></a>
+    </nav>
+
+    <a class="sidebar-logout" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Logout</a>
+  </aside>
+
+  <div class="main-content erp-main">
+    <nav class="top-navbar erp-topbar">
+      <div>
+        <p class="eyebrow">Hospital Management System</p>
+        <h1>{{ title|default:"Dashboard Overview" }}</h1>
+      </div>
+      <div class="topbar-tools">
+        <button class="topbar-icon" type="button" title="Notifications">
+          <i class="fa fa-bell-o"></i>
+          <span>{{ unread_notifications|default:"0" }}</span>
+        </button>
+        <div class="topbar-profile">
+          <span><i class="fa fa-user-md"></i></span>
+          <div>
+            <strong>{{ request.user.username|default:"Admin" }}</strong>
+            <small>{{ request.session.user_role|title|default:"Admin" }}</small>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="content">
+      {% block content %}
+      {% endblock content %}
+    </div>
+  </div>
+  </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      document.querySelectorAll('.has-submenu > a').forEach(function (link) {
-        link.addEventListener('click', function (event) {
-          event.preventDefault();
-          this.parentElement.classList.toggle('open');
+      document.querySelectorAll('.nav-group > button').forEach(function (button) {
+        button.addEventListener('click', function () {
+          const group = this.parentElement;
+          group.classList.toggle('open');
         });
       });
+
+      const search = document.getElementById('globalSearch');
+      if (search) {
+        search.addEventListener('input', function () {
+          const value = this.value.toLowerCase();
+          document.querySelectorAll('[data-search-row]').forEach(function (row) {
+            row.style.display = row.textContent.toLowerCase().includes(value) ? '' : 'none';
+          });
+        });
+      }
     });
   </script>
-
 </body>
 </html>

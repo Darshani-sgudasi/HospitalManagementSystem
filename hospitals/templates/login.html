@@ -33,10 +33,23 @@
         {% if error == "yes" %}
           <div class="auth-message error">Invalid username or password. Please try again.</div>
         {% endif %}
+        {% if error == "role" %}
+          <div class="auth-message error">This account cannot login as Admin.</div>
+        {% endif %}
         <form method="post" class="auth-form" id="loginForm">
           {% csrf_token %}
           <h2>Welcome Back</h2>
-          <p>Sign in to your HMS account to continue.</p>
+          <p>Select your role and sign in to continue.</p>
+
+          <div class="auth-field">
+            <select name="role" id="role" required>
+              <option value="" disabled {% if not role %}selected{% endif %}>Choose your role</option>
+              <option value="admin" {% if role == "admin" %}selected{% endif %}>Admin</option>
+              <option value="doctor" {% if role == "doctor" %}selected{% endif %}>Doctor</option>
+              <option value="patient" {% if role == "patient" %}selected{% endif %}>Patient</option>
+            </select>
+            <label for="role">Login As</label>
+          </div>
 
           <div class="auth-field">
             <input type="text" name="uname" id="uname" placeholder=" " required>
