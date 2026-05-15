@@ -21,6 +21,8 @@ This project focuses on providing:
 •	Hospital analytics dashboard
 •	Bed and ward management
 The application uses a clean and modern user interface similar to professional ERP systems, making it easy to use and visually attractive.
+<img width="1920" height="1080" alt="Screenshot (46)" src="https://github.com/user-attachments/assets/4dddd9e6-18c6-4124-911c-283de47443ae" />
+
 ________________________________________
 OBJECTIVES OF THE PROJECT
 The major objectives of the Hospital Management System are:
@@ -56,6 +58,14 @@ In the existing manual system:
 •	Medicine inventory tracking is inefficient.
 •	Data management is not centralized.
 The manual system increases workload and decreases operational efficiency.
+<img width="1920" height="1080" alt="Screenshot (47)" src="https://github.com/user-attachments/assets/9ac18859-47fd-453c-829a-ba835aa3214d" />
+<img width="1920" height="1080" alt="Screenshot (53)" src="https://github.com/user-attachments/assets/0be4702a-e8ff-49b7-847f-8b2e6924b018" />
+<img width="1920" height="1080" alt="Screenshot (52)" src="https://github.com/user-attachments/assets/b0e405b9-6d97-4345-9254-e8f0807534d9" />
+<img width="1920" height="1080" alt="Screenshot (51)" src="https://github.com/user-attachments/assets/5900b0a2-a36f-4e91-98e9-e6190fb476b0" />
+<img width="1920" height="1080" alt="Screenshot (50)" src="https://github.com/user-attachments/assets/ef5c518c-e497-4df6-8156-d103d8a6d2b7" />
+<img width="1920" height="1080" alt="Screenshot (49)" src="https://github.com/user-attachments/assets/5fa8e869-b475-4e93-a095-5b832cbd518b" />
+<img width="1920" height="1080" alt="Screenshot (48)" src="https://github.com/user-attachments/assets/767a825e-ba50-4509-874c-493c8870ed9b" />
+
 ________________________________________
 PROPOSED SYSTEM
 The proposed Hospital Management System is a web-based centralized platform designed to automate hospital activities.
