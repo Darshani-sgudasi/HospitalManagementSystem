@@ -1,7 +1,7 @@
 
 Contact for the project Report and PPT
 -------->>>>>
-Linkdln--->>www.linkedin.com/in/darshani-sanjivakumar-gudasi-1ba45930b
+linkedin--->>www.linkedin.com/in/darshani-sanjivakumar-gudasi-1ba45930b
 ...instagram--->>><img width="500" height="500" alt="darshani_gudasi_qr" src="https://github.com/user-attachments/assets/d6816d06-f512-49dc-8b44-2a166a9da5cf" />
 
 ________________________________________
