@@ -1,3 +1,10 @@
+<img width="1920" height="1080" alt="Screenshot (53)" src="https://github.com/user-attachments/assets/5b46dd42-ff5a-47e2-b20e-99f638f40ea5" />
+<img width="1920" height="1080" alt="Screenshot (52)" src="https://github.com/user-attachments/assets/1cf5b7e2-a545-4942-a8f6-568e99eec2cf" />
+<img width="1920" height="1080" alt="Screenshot (51)" src="https://github.com/user-attachments/assets/7242da9b-84b5-4fff-9f19-5522d50cb97b" />
+<img width="1920" height="1080" alt="Screenshot (50)" src="https://github.com/user-attachments/assets/d5566b09-7e49-4eec-b230-8ce9c42bb639" />
+<img width="1920" height="1080" alt="Screenshot (49)" src="https://github.com/user-attachments/assets/5542b461-8160-4945-9f7e-57653edc8ee7" />
+<img width="1920" height="1080" alt="Screenshot (48)" src="https://github.com/user-attachments/assets/487eaba4-d290-4798-8fdf-3e504c0bf720" />
+<img width="1920" height="1080" alt="Screenshot (47)" src="https://github.com/user-attachments/assets/3714a3f6-4a20-4e88-8e2f-a0e34eb27ea2" />
 HOSPITAL MANAGEMENT SYSTEM
 Project Report
 ________________________________________
